@@ -17,7 +17,7 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
+	App->camera->Move(vec3(1.0f, 20.0f, 1.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
 	s.size = vec3(5, 3, 1);
@@ -26,6 +26,18 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->AddBody(s, 0.0f);
 	sensor->SetAsSensor(true);
 	sensor->collision_listeners.add(this);
+	App->physics->AddStraightRoad(100, vec3(0.0f, 0.0f, 0.0f), 1);
+	App->physics->AddCurve(20, vec3(0.0f, 0.0f, 50.0f),0);
+	App->physics->AddStraightRoad(40, vec3(20.0f, 0.0f, 90.0f), 1);
+	App->physics->AddCurve(20, vec3(20.0f, 0.0f, 110.0f), 1);
+	App->physics->AddCurve(20, vec3(0.0f, 0.0f, 130.0f), 1);
+	App->physics->AddCorner(30, vec3(10.0f, 0.0f, 165.0f), 0);
+	App->physics->AddStraightRoad(40, vec3(-40.0f, 0.0f, 150.0f), 0);
+	App->physics->AddCurveX(20, vec3(-80.0f, 0.0f, 170.0f), 1);
+	App->physics->AddStraightRoad(80, vec3(-120.0f, 0.0f, 170.0f), 0);
+	App->physics->AddCorner(30, vec3(-175.0f, 0.0f, 170.0f), 1);
+	App->physics->AddStraightRoad(30, vec3(-190.0f, 0.0f, 155.0f), 1);
+	App->physics->AddCorner(30, vec3(-190.0f, 0.0f, 125.0f), 2);
 
 	return ret;
 }
@@ -53,6 +65,8 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+
+
 	LOG("Hit!");
 }
 

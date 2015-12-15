@@ -31,6 +31,12 @@ public:
 	PhysBody3D* AddBody(const Cube& cube, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cylinder& cylinder, float mass = 1.0f);
 	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
+	//Circuit Metodes
+	void AddStraightRoad(int large, const vec3& pos, int orientation);
+	void AddCurve(const int large, const vec3& pos, int orientation);
+	void AddCurveX(const int large, const vec3& pos, int orientation);
+	void AddCorner(const int large, const vec3& pos, int orientation);
+	void AddCornerX(const int large, const vec3& pos, int orientation);
 
 	void AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
