@@ -66,3 +66,13 @@ bool PhysBody3D::IsSensor() const
 {
 	return is_sensor;
 }
+
+void PhysBody3D::SetAngularSpeed(float x, float y, float z)
+{
+	body->setAngularVelocity(btVector3( x,  y, z));
+}
+
+void PhysBody3D::SetLinearSpeed(float x, float y, float z)
+{
+	body->setLinearVelocity(btVector3(x, y, z));
+}

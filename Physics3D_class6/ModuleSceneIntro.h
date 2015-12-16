@@ -35,4 +35,6 @@ public:
 	PhysBody3D* sensor3;
 	Cube v;
 	PhysBody3D* sensor4;
+	Cube w;
+	PhysBody3D* sensor5;
 };

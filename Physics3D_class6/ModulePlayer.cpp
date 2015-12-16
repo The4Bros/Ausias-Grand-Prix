@@ -114,6 +114,33 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
+
+	
+		float speed_cam = 0.09f;
+		vec3 p = vehicle->getPos();
+		btVector3 vehicle_vector = vehicle->vehicle->getForwardVector();
+		vec3 f(vehicle_vector.getX(), vehicle_vector.getY(), vehicle_vector.getZ());
+	
+		vec3 dist_to_car = { -15.0f, 8.0f, -15.0f };
+		vec3 camera_new_position = { p.x + (f.x * dist_to_car.x), p.y + f.y + dist_to_car.y, p.z + (f.z * dist_to_car.z) };
+		vec3 speed_camera = camera_new_position - App->camera->Position;
+		vec3 reference(p.x, p.y, p.z);
+	
+		App->camera->Look(App->camera->Position + (speed_cam * speed_camera), reference);
+		
+	
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN){
+		
+		switch (App->scene_intro->checkpointCounter){
+
+		case 1:  Respawn(0, vec3(10, 12, 0));  break;
+		case 2: Respawn(180, vec3(-175, 12, 155));break;
+		case 3: Respawn(90, vec3(-55, 12, -75)); break;
+		default: break;
+		}
+	}
+
 	turn = acceleration = brake = 0.0f;
 
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -145,16 +172,24 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
+	
 	vehicle->Brake(brake);
 
 	vehicle->Render();
 
-	char title[80];
-	sprintf_s(title, "%.1f Km/h", vehicle->GetKmh());
-	App->window->SetTitle(title);
+	
 
 	return UPDATE_CONTINUE;
 }
 
 
+void ModulePlayer::Respawn(float degrees,vec3 pos)
+{
+	mat4x4 tmp_mat;
+	tmp_mat.rotate(degrees, { 0, 1, 0 });
+	vehicle->SetTransform(&tmp_mat);
 
+	vehicle->SetAngularSpeed(0, 0, 0);
+	vehicle->SetLinearSpeed(0, 0, 0);
+	vehicle->SetPos(pos.x, pos.y, pos.z);
+}

@@ -60,7 +60,7 @@ bool ModuleSceneIntro::Start()
 
 	//Ramp------------------------------------------------------
 	r.size = vec3(10, 10, 1);
-	r.SetPos(5, 1, 20);
+	r.SetPos( 5, 1, -45);
 	r.SetRotation(60, vec3(1, 0, 0));
 	sensor2 = App->physics->AddBody(r, 0.0f);
 	sensor2->SetAsSensor(false);
@@ -68,14 +68,14 @@ bool ModuleSceneIntro::Start()
 
 
 	//Sensors ----------------------------------------------------
-	s.size = vec3(30, 10, 1);
-	s.SetPos(15, 1.0f, 0);
+	s.size = vec3(30, 50, 1);
+	s.SetPos(15, 25.0f, 0);
 	sensor = App->physics->AddBody(s, 0.0f);
 	sensor->SetAsSensor(true);
 	sensor->collision_listeners.add(this);
 
-	t.size = vec3(5, 10, 1);
-	t.SetPos(200, 1.0f, 0);
+	t.size = vec3(30, 10, 1);
+	t.SetPos(-175.0f, 0.0f, 155.0f);
 	sensor3 = App->physics->AddBody(t, 0.0f);
 	sensor3->SetAsSensor(true);
 	sensor3->collision_listeners.add(this);
@@ -87,9 +87,14 @@ bool ModuleSceneIntro::Start()
 	sensor4->collision_listeners.add(this);
 	
 
+	w.size = vec3(60, 60, 1);
+	w.SetPos(0, 40.0f, 60);
+	sensor5 = App->physics->AddBody(w, 0.0f);
+	sensor5->SetAsSensor(true);
+	sensor5->collision_listeners.add(this);
 
 	
-
+	
 
 	return ret;
 }
@@ -116,6 +121,9 @@ update_status ModuleSceneIntro::Update(float dt)
 	sensor4->GetTransform(&v.transform);
 	r.Render();
 	
+	char title[80];
+	sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f", last_time, best_time);
+	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
 }
@@ -130,12 +138,14 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			time = timerCount->Read() - time;
 			last_time = (time/1000);
 
-			if (last_time < best_time && last_time > 30.0f){
+			if (last_time < best_time ){
 
 				best_time = last_time;
 
 			}
-		
+
+			LOG("LAST TIME %f", last_time);
+			LOG("BEST TIME %f", best_time);
 		}
 		checkpointCounter = 1;
 
@@ -148,12 +158,16 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	}
 
 	if (body1 == sensor4){
-
+		if (checkpointCounter == 2){
 		checkpointCounter = 3;
+		}
+	}
+
+	if (body1 == sensor5){
+		
+		
 
 	}
 
-	LOG("LAST TIME %f", last_time);
-	LOG("BEST TIME %f", best_time);
 }
 

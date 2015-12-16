@@ -20,7 +20,7 @@ public:
 	bool CleanUp();
 
 public:
-
+	void Respawn(float degrees, vec3 pos);
 	PhysVehicle3D* vehicle;
 	float turn;
 	float acceleration;
