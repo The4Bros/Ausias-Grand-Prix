@@ -24,9 +24,15 @@ public:
 public:
 	uint checkpointCounter;
 	Timer* timerCount;
+	float time_remaining;
 	float time;
+	float done_time;
 	float last_time;
 	float best_time;
+	float bonus;
+	bool lastlap;
+	float time_to_win;
+	bool  win;
 	Cube s;
 	PhysBody3D* sensor;
 	Cube r;
