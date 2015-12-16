@@ -25,7 +25,7 @@ void PhysVehicle3D::Render()
 {
 	Cylinder wheel;
 
-	wheel.color = Blue;
+	wheel.color = White;
 
 	for(int i = 0; i < vehicle->getNumWheels(); ++i)
 	{
@@ -81,8 +81,11 @@ void PhysVehicle3D::Render()
 
 
 
-
-
+	chassis.color = Green;
+	chassis2.color = Green;
+	chassis3.color = Green;
+	chassis4.color = Green;
+	
 
 
 	chassis.Render();

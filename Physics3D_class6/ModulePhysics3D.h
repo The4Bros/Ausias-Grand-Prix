@@ -26,7 +26,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-
+	
 	PhysBody3D* AddBody(const Sphere& sphere, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cube& cube, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cylinder& cylinder, float mass = 1.0f);
@@ -37,6 +37,7 @@ public:
 	void AddCurveX(const int large, const vec3& pos, int orientation);
 	void AddCorner(const int large, const vec3& pos, int orientation);
 	void AddCornerX(const int large, const vec3& pos, int orientation);
+	void RenderWalls();
 
 	void AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
@@ -44,7 +45,7 @@ public:
 private:
 
 	bool debug;
-
+	p2List<Cube*> RenderCubes;
 	btDefaultCollisionConfiguration*	collision_conf;
 	btCollisionDispatcher*				dispatcher;
 	btBroadphaseInterface*				broad_phase;

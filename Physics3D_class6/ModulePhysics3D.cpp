@@ -55,6 +55,8 @@ bool ModulePhysics3D::Start()
 	world->setGravity(GRAVITY);
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
+	
+
 	// Big plane as ground
 	{
 		btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
@@ -127,6 +129,9 @@ update_status ModulePhysics3D::Update(float dt)
 			item = item->next;
 		}
 
+		
+
+
 		if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 		{
 			Sphere s(1);
@@ -184,6 +189,11 @@ bool ModulePhysics3D::CleanUp()
 		delete item->data;
 
 	vehicles.clear();
+
+	for (p2List_item<Cube*>* item = RenderCubes.getFirst(); item; item = item->next)
+		delete item->data;
+
+	RenderCubes.clear();
 
 	delete vehicle_raycaster;
 	delete world;
@@ -396,43 +406,45 @@ void ModulePhysics3D::AddStraightRoad(int large, const vec3& pos, int orientatio
 	
 	if (orientation == 0)
 	{
-		Cube c;
-		c.size = vec3(large, 2, 1);
-		c.SetPos(x, 1, z);
+		Cube* c  = new Cube();
+		c->size = vec3(large, 2, 1);
+		c->SetPos(x, 1, z);
+		RenderCubes.add(c);
 		PhysBody3D* road;
-		road = App->physics->AddBody(c, 0.0f);
+		road = App->physics->AddBody(*c, 0.0f);
 		road->SetAsSensor(false);
 		road->collision_listeners.add(this);
+		
 
-		Cube c2;
-		c2.size = vec3(large, 2, 1);
-		c2.SetPos(x, 1, 30 + z);
+		Cube* c2 = new Cube();
+		c2->size = vec3(large, 2, 1);
+		c2->SetPos(x, 1, 30 + z);
 		PhysBody3D* road2;
-		road2 = App->physics->AddBody(c2, 0.0f);
+		road2 = App->physics->AddBody(*c2, 0.0f);
 		road2->SetAsSensor(false);
 		road2->collision_listeners.add(this);
-
+		RenderCubes.add(c2);
 	}
 
 	else
 	{
 
-		Cube c;
-		c.size = vec3(1, 2, large);
-		c.SetPos(x, 1, z);
+		Cube* c = new Cube();;
+		c->size = vec3(1, 2, large);
+		c->SetPos(x, 1, z);
 		PhysBody3D* road;
-		road = App->physics->AddBody(c, 0.0f);
+		road = App->physics->AddBody(*c, 0.0f);
 		road->SetAsSensor(false);
 		road->collision_listeners.add(this);
-
-		Cube c2;
-		c2.size = vec3(1, 2, large);
-		c2.SetPos(30 + x, 1, z);
+		RenderCubes.add(c);
+		Cube* c2 = new Cube();;
+		c2->size = vec3(1, 2, large);
+		c2->SetPos(30 + x, 1, z);
 		PhysBody3D* road2;
-		road2 = App->physics->AddBody(c2, 0.0f);
+		road2 = App->physics->AddBody(*c2, 0.0f);
 		road2->SetAsSensor(false);
 		road2->collision_listeners.add(this);
-
+		RenderCubes.add(c2);
 	}	
 }
 void ModulePhysics3D::AddCurve(const int large, const vec3& pos, int orientation){
@@ -446,52 +458,47 @@ void ModulePhysics3D::AddCurve(const int large, const vec3& pos, int orientation
 		
 		for (int i = 0; i < large; i++){
 
-			Cube c;
-			c.size = vec3(1 , 2, 1);
-			c.SetPos(x + i, 1, z + i );
+			Cube* c = new Cube();;
+			c->size = vec3(1 , 2, 1);
+			c->SetPos(x + i, 1, z + i );
 			
-			
+			RenderCubes.add(c);
 			PhysBody3D* road;
-			road = App->physics->AddBody(c, 0.0f);
+			road = App->physics->AddBody(*c, 0.0f);
 			road->SetAsSensor(false);
 			road->collision_listeners.add(this);
-
-			Cube c2;
-			c2.size = vec3(1, 2, 1);
-			c2.SetPos(x + 30 + i, 1, z  + i );
+			
+			Cube* c2 = new Cube();
+			c2->size = vec3(1, 2, 1);
+			c2->SetPos(x + 30 + i, 1, z  + i );
 			PhysBody3D* road2;
-			road2 = App->physics->AddBody(c2, 0.0f);
+			road2 = App->physics->AddBody(*c2, 0.0f);
 			road2->SetAsSensor(false);
 			road2->collision_listeners.add(this);
-
+			RenderCubes.add(c2);
 		}
-
-
-
-		
-
-		
-
 	}
+
 	else
 	{
 		for (int i = 0; i < large; i++){
 
-			Cube c;
-			c.size = vec3(1, 2, 1);
-			c.SetPos(x - i, 1, z + i);
+			Cube* c = new Cube();
+			c->size = vec3(1, 2, 1);
+			c->SetPos(x - i, 1, z + i);
 			PhysBody3D* road;
-			road = App->physics->AddBody(c, 0.0f);
+			road = App->physics->AddBody(*c, 0.0f);
 			road->SetAsSensor(false);
 			road->collision_listeners.add(this);
-
-			Cube c2;
-			c2.size = vec3(1, 2, 1);
-			c2.SetPos(x + 30 - i, 1, z + i);
+			RenderCubes.add(c);
+			Cube* c2 = new Cube();
+			c2->size = vec3(1, 2, 1);
+			c2->SetPos(x + 30 - i, 1, z + i);
 			PhysBody3D* road2;
-			road2 = App->physics->AddBody(c2, 0.0f);
+			road2 = App->physics->AddBody(*c2, 0.0f);
 			road2->SetAsSensor(false);
 			road2->collision_listeners.add(this);
+			RenderCubes.add(c2);
 		}
 	}
 }
@@ -507,24 +514,25 @@ void ModulePhysics3D::AddCurveX(const int large, const vec3& pos, int orientatio
 
 		for (int i = 0; i < large; i++){
 
-			Cube c;
-			c.size = vec3(1, 2, 1);
-			c.SetPos(x + i, 1, z + i);
+			Cube* c = new Cube();
+			c->size = vec3(1, 2, 1);
+			c->SetPos(x + i, 1, z + i);
 
-
+			RenderCubes.add(c);
 			PhysBody3D* road;
-			road = App->physics->AddBody(c, 0.0f);
+			road = App->physics->AddBody(*c, 0.0f);
 			road->SetAsSensor(false);
 			road->collision_listeners.add(this);
+			
 
-			Cube c2;
-			c2.size = vec3(1, 2, 1);
-			c2.SetPos(x + i, 1, z + 30 + i);
+			Cube* c2 = new Cube();
+			c2->size = vec3(1, 2, 1);
+			c2->SetPos(x + i, 1, z + 30 + i);
 			PhysBody3D* road2;
-			road2 = App->physics->AddBody(c2, 0.0f);
+			road2 = App->physics->AddBody(*c2, 0.0f);
 			road2->SetAsSensor(false);
 			road2->collision_listeners.add(this);
-
+			RenderCubes.add(c2);
 		}
 	}
 
@@ -532,21 +540,23 @@ void ModulePhysics3D::AddCurveX(const int large, const vec3& pos, int orientatio
 	{
 		for (int i = 0; i < large; i++){
 
-			Cube c;
-			c.size = vec3(1, 2, 1);
-			c.SetPos(x + i, 1, z - i);
+			Cube* c = new Cube();
+			c->size = vec3(1, 2, 1);
+			c->SetPos(x + i, 1, z - i);
 			PhysBody3D* road;
-			road = App->physics->AddBody(c, 0.0f);
+			road = App->physics->AddBody(*c, 0.0f);
 			road->SetAsSensor(false);
 			road->collision_listeners.add(this);
+			RenderCubes.add(c);
 
-			Cube c2;
-			c2.size = vec3(1, 2, 1);
-			c2.SetPos(x + i, 1, z + 30 - i);
+			Cube* c2 = new Cube();
+			c2->size = vec3(1, 2, 1);
+			c2->SetPos(x + i, 1, z + 30 - i);
 			PhysBody3D* road2;
-			road2 = App->physics->AddBody(c2, 0.0f);
+			road2 = App->physics->AddBody(*c2, 0.0f);
 			road2->SetAsSensor(false);
 			road2->collision_listeners.add(this);
+			RenderCubes.add(c2);
 		}
 	}
 }
@@ -558,67 +568,99 @@ void ModulePhysics3D::AddCorner(const int large, const vec3& pos, int orientatio
 
 	if (orientation == 0)
 	{
-		Cube c;
-		c.size = vec3(1 , 2, large);
-		c.SetPos(x , 1, z);
+		Cube* c = new Cube();
+		c->size = vec3(1 , 2, large);
+		c->SetPos(x , 1, z);
 		PhysBody3D* road;
-		road = App->physics->AddBody(c, 0.0f);
+		road = App->physics->AddBody(*c, 0.0f);
 		road->SetAsSensor(false);
 		road->collision_listeners.add(this);
-
-		Cube c2;
-		c2.size = vec3(30, 2, 1);
-		c2.SetPos(x - 15 , 1, z + (large/2));
+		RenderCubes.add(c);
+		Cube* c2 = new Cube();
+		c2->size = vec3(30, 2, 1);
+		c2->SetPos(x - 15 , 1, z + (large/2));
 		PhysBody3D* road2;
-		road2 = App->physics->AddBody(c2, 0.0f);
+		road2 = App->physics->AddBody(*c2, 0.0f);
 		road2->SetAsSensor(false);
 		road2->collision_listeners.add(this);
-		
+		RenderCubes.add(c2);
 	}
 
 	else if (orientation == 1)
 	{
-		Cube c;
-		c.size = vec3(large, 2, 1);
-		c.SetPos(x , 1, z+30);
+		Cube* c = new Cube();
+		c->size = vec3(large, 2, 1);
+		c->SetPos(x , 1, z+30);
 		PhysBody3D* road;
-		road = App->physics->AddBody(c, 0.0f);
+		road = App->physics->AddBody(*c, 0.0f);
 		road->SetAsSensor(false);
 		road->collision_listeners.add(this);
-
-		Cube c2;
-		c2.size = vec3(1, 2, 30);
-		c2.SetPos(x - 15, 1, z  + 30- (large / 2));
+		RenderCubes.add(c);
+		Cube* c2 = new Cube();
+		c2->size = vec3(1, 2, 30);
+		c2->SetPos(x - 15, 1, z  + 30- (large / 2));
 		PhysBody3D* road2;
-		road2 = App->physics->AddBody(c2, 0.0f);
+		road2 = App->physics->AddBody(*c2, 0.0f);
 		road2->SetAsSensor(false);
 		road2->collision_listeners.add(this);
+		RenderCubes.add(c2);
 
 	}
-	else {
+	else if ( orientation == 2 )
+	{
 
-		Cube c;
-		c.size = vec3(1, 2,  large);
-		c.SetPos(x, 1, z);
+		Cube* c = new Cube();
+		c->size = vec3(1, 2,  large);
+		c->SetPos(x, 1, z);
 		PhysBody3D* road;
-		road = App->physics->AddBody(c, 0.0f);
+		road = App->physics->AddBody(*c, 0.0f);
 		road->SetAsSensor(false);
 		road->collision_listeners.add(this);
-
-		Cube c2;
-		c2.size = vec3(30, 2, 1);
-		c2.SetPos(x + 15, 1, z - (large / 2));
+		RenderCubes.add(c);
+		Cube* c2 = new Cube();
+		c2->size = vec3(30, 2, 1);
+		c2->SetPos(x + 15, 1, z - (large / 2));
 		PhysBody3D* road2;
-		road2 = App->physics->AddBody(c2, 0.0f);
+		road2 = App->physics->AddBody(*c2, 0.0f);
 		road2->SetAsSensor(false);
 		road2->collision_listeners.add(this);
+		RenderCubes.add(c2);
+
+	}
+
+	else
+	{
+		Cube* c = new Cube();
+		c->size = vec3(1, 2, large);
+		c->SetPos(x, 1, z);
+		PhysBody3D* road;
+		road = App->physics->AddBody(*c, 0.0f);
+		road->SetAsSensor(false);
+		road->collision_listeners.add(this);
+		RenderCubes.add(c);
+		Cube* c2 = new Cube();
+		c2->size = vec3(30, 2, 1);
+		c2->SetPos(x - 15, 1, z - (large / 2));
+		PhysBody3D* road2;
+		road2 = App->physics->AddBody(*c2, 0.0f);
+		road2->SetAsSensor(false);
+		road2->collision_listeners.add(this);
+		RenderCubes.add(c2);
 
 	}
 }
 
+void ModulePhysics3D::RenderWalls(){
 
+	p2List_item<Cube*>* item2 = RenderCubes.getFirst();
+	while (item2)
+	{
 
+		item2->data->Render();
+		item2 = item2->next;
+	}
 
+}
 
 
 
