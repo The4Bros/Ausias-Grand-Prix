@@ -5,7 +5,8 @@
 #include "PhysBody3D.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
-{}
+{
+}
 
 ModuleSceneIntro::~ModuleSceneIntro()
 {}
@@ -93,7 +94,7 @@ bool ModuleSceneIntro::Start()
 	sensor5->collision_listeners.add(this);
 
 	
-	trial = App->textures->Load("snoop.png");
+	
 
 	return ret;
 }
@@ -119,8 +120,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	sensor3->GetTransform(&t.transform);
 	sensor4->GetTransform(&v.transform);
 	r.Render();
-
-	App->render2D->Blit(trial, 0, 0, NULL);
 	
 	char title[80];
 	sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f", last_time, best_time);

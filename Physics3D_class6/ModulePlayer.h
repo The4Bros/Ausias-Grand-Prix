@@ -9,28 +9,6 @@ struct PhysVehicle3D;
 #define TURN_DEGREES 15.0f * DEGTORAD
 #define BRAKE_POWER 1000.0f
 
-enum CameraStates
-{
-	FREE = 0,
-	PILOT_VIEW,
-	THIRD_PERSON_VIEW
-};
-
-class CameraController
-{
-public:
-	CameraController();
-
-	bool Start(Application* App);
-	void Update();
-	bool Follow(PhysVehicle3D* _vehicle, CameraStates _state = CameraStates::THIRD_PERSON_VIEW);
-
-public:
-	Application* App;
-	PhysVehicle3D* vehicle;
-	CameraStates state;
-};
-
 class ModulePlayer : public Module
 {
 public:
@@ -47,6 +25,4 @@ public:
 	float turn;
 	float acceleration;
 	float brake;
-
-	CameraController camera;
 };

@@ -37,6 +37,4 @@ public:
 	PhysBody3D* sensor4;
 	Cube w;
 	PhysBody3D* sensor5;
-
-	SDL_Texture* trial;
 };
