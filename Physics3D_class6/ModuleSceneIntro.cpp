@@ -14,9 +14,14 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	timerCount = new Timer();
+	lastlap = false;
 	time = 0.0f;
 	last_time = 0.0f;
+	done_time = 0.0f;
 	best_time = 500.0f;
+	bonus = 0.0f;
+	win = false;
+	time_to_win = 28.0f;
 	LOG("Loading Intro assets");
 	bool ret = true;
 	timerCount->Start();
@@ -116,9 +121,32 @@ update_status ModuleSceneIntro::Update(float dt)
 	sensor3->GetTransform(&t.transform);
 	sensor4->GetTransform(&v.transform);
 	r.Render();
+
+	time = timerCount->Read();
+	char title[140];
+	time_remaining = 1 - (time / 60000);
 	
-	char title[80];
-	sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f", last_time, best_time);
+	if (time_remaining >= 0)sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f   -  Time Remaining %0.2f", last_time, best_time, time_remaining);
+	else { sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f    - Last Lap ", last_time, best_time); lastlap = true; }
+	if (win)
+	{
+		sprintf_s(title, "You win with this time %0.3f - The difference with this time and the objective time is %0.3f -Time to restart : %0.2f", best_time, time_to_win - best_time, 20 - (time - done_time) / 1000);
+		
+		if (20 - (time - done_time) / 1000 < 0)
+		{
+			win = false;
+			last_time = 0.0f;
+			best_time = 0.0f;
+			checkpointCounter = 1;
+			App->player->Respawn(0, vec3(10, 12, 0));
+			timerCount->Stop();
+			timerCount->Start();
+			lastlap = false;
+			done_time = 0.0f;
+		}
+		
+	}
+	
 	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
@@ -131,19 +159,31 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 		if (checkpointCounter == 3){
 
-			time = timerCount->Read() - time;
-			last_time = (time/1000);
+			time = time - done_time;
+			done_time = timerCount->Read();
+			last_time = (time / 1000) - bonus;
 
-			if (last_time < best_time ){
-
+			if (last_time < best_time )
 				best_time = last_time;
 
+			if (time_to_win >= best_time)
+				win = true;
+
+			if (lastlap)
+			{
+				last_time = 0.0f;
+				timerCount->Stop();
+				timerCount->Start();
+				lastlap = false;
+				done_time = 0.0f;
 			}
+
 
 			LOG("LAST TIME %f", last_time);
 			LOG("BEST TIME %f", best_time);
 		}
 		checkpointCounter = 1;
+		bonus = 0.0f;
 
 	}
 
@@ -161,7 +201,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 	if (body1 == sensor5){
 		
-		
+		bonus = 5.0f;
 
 	}
 
