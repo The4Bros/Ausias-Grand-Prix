@@ -27,6 +27,7 @@ public:
 	float time;
 	float last_time;
 	float best_time;
+
 	Cube s;
 	PhysBody3D* sensor;
 	Cube r;
@@ -37,6 +38,4 @@ public:
 	PhysBody3D* sensor4;
 	Cube w;
 	PhysBody3D* sensor5;
-
-	SDL_Texture* trial;
 };

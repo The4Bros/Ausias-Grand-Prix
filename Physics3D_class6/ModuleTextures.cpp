@@ -1,11 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleRender2D.h"
 #include "ModuleTextures.h"
 
-#include "SDL_image/include/SDL_image.h"
 #pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
-
 
 ModuleTextures::ModuleTextures(Application* app, bool start_enabled) : Module(app, start_enabled)
 {}
@@ -26,7 +23,7 @@ bool ModuleTextures::Init()
 	if ((init & flags) != flags)
 	{
 		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
-		ret = false;
+		//ret = false;
 	}
 
 	return ret;
@@ -62,7 +59,7 @@ SDL_Texture* const ModuleTextures::Load(const char* path)
 	SDL_Texture* texture = NULL;
 	//SDL_Surface* surface = IMG_Load_RW(App->fs->Load(path), 1);
 
-	texture = IMG_LoadTexture(App->render2D->renderer, path);
+	texture = SDL_CreateTexture(App->render2D->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 500, 482);
 
 	return texture;
 }

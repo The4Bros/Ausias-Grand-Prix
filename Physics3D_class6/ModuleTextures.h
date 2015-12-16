@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "p2List.h"
 
+#include "SDL_image/include/SDL_image.h"
+
 struct SDL_Texture;
 struct SDL_Surface;
 
