@@ -116,7 +116,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
-
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -124,6 +124,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	SDL_GL_SwapWindow(App->window->window);
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -149,4 +150,15 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::displayText(float x, float y, float z , int r, int g, int b, const char *string) {
+	int j = strlen(string);
+
+	glColor3f(r, g, b);
+	glRasterPos3f(x, y, z);
+	for (int i = 0; i < j; i++) {
+		
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
+	}
 }

@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "glut\glut.h"
 
 #define MAX_LIGHTS 8
 
@@ -16,7 +17,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-
+	void displayText(float x, float y,float z, int r, int g, int b, const char *string);
 	void OnResize(int width, int height);
 
 public:

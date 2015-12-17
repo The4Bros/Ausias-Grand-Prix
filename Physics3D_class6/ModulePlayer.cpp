@@ -30,7 +30,7 @@ bool ModulePlayer::Start()
 	car.suspensionCompression = 0.83f;
 	car.suspensionDamping = 0.88f;
 	car.maxSuspensionTravelCm = 1000.0f;
-	car.frictionSlip = 50.5;
+	car.frictionSlip = 500.0f;
 	car.maxSuspensionForce = 6000.0f;
 
 	// Wheel properties ---------------------------------------
@@ -115,20 +115,20 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
-
 	
+
 		float speed_cam = 0.09f;
 		vec3 p = vehicle->getPos();
 		btVector3 vehicle_vector = vehicle->vehicle->getForwardVector();
 		vec3 f(vehicle_vector.getX(), vehicle_vector.getY(), vehicle_vector.getZ());
-	
+
 		vec3 dist_to_car = { -15.0f, 8.0f, -15.0f };
 		vec3 camera_new_position = { p.x + (f.x * dist_to_car.x), p.y + f.y + dist_to_car.y, p.z + (f.z * dist_to_car.z) };
 		vec3 speed_camera = camera_new_position - App->camera->Position;
 		vec3 reference(p.x, p.y, p.z);
-	
+
 		App->camera->Look(App->camera->Position + (speed_cam * speed_camera), reference);
-		
+
 	
 
 	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN){

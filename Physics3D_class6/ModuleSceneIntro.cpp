@@ -22,12 +22,18 @@ bool ModuleSceneIntro::Start()
 	bonus = 0.0f;
 	win = false;
 	time_to_win = 30.0f;
+	checkpointCounter = 1;
 	LOG("Loading Intro assets");
 	bool ret = true;
 	timerCount->Start();
 	App->camera->Move(vec3(1.0f, 20.0f, 1.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+
+	//Music
+
+	
+	App->audio->PlayMusic("Game/han_solo.wav", 2.0f);
 
 	//Circuit Walls ---------------------------------------------------------
 	App->physics->AddStraightRoad(100, vec3(0.0f, 0.0f, 0.0f), 1);
@@ -96,6 +102,14 @@ bool ModuleSceneIntro::Start()
 	sensor5 = App->physics->AddBody(w, 0.0f);
 	sensor5->SetAsSensor(true);
 	sensor5->collision_listeners.add(this);
+	
+
+	scoreCube.size = vec3(20, 20, 1);
+	scoreCube.SetPos(-15, 10.0f, 0);
+	scoreCube.SetRotation(150, vec3(0, 1, 0));
+	scores = App->physics->AddBody(scoreCube, 0.0f);
+	scores->SetAsSensor(false);
+	scores->collision_listeners.add(this);
 
 	return ret;
 }
@@ -113,42 +127,55 @@ update_status ModuleSceneIntro::Update(float dt)
 {
 	Plane p(0, 1, 0,0);
 	p.color = Black;
-	p.axis = true;
 	p.Render();
 	App->physics->RenderWalls();
 	sensor->GetTransform(&s.transform);
 	sensor2->GetTransform(&r.transform);
 	sensor3->GetTransform(&t.transform);
 	sensor4->GetTransform(&v.transform);
+	r.color = Blue;
 	r.Render();
+	scoreCube.Render();
+	
+	
 
 	time = timerCount->Read();
 	char title[140];
-	time_remaining = 1 - (time / 60000);
+	time_remaining = 4 - (time / 60000);
 	
-	if (time_remaining >= 0)sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f   -  Time Remaining %0.2f", last_time, best_time, time_remaining);
+	if (time_remaining >= 0)sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f   -  Time Remaining %0.2f  - Time to win %0.2f", last_time, best_time, time_remaining,time_to_win);
 	else { sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f    - Last Lap ", last_time, best_time); lastlap = true; }
 	if (win)
 	{
 		sprintf_s(title, "You win with this time %0.3f - The difference with this time and the objective time is %0.3f -Time to restart : %0.2f", best_time, time_to_win - best_time, 20 - (time - done_time) / 1000);
-		
+		App->renderer3D->displayText(-5, 8, -5, 0, 0, 0, "YOU WIN BABY!!!");
+		App->renderer3D->displayText(0, 8, 500, 1, 1, 1, "YOU WIN BABY!!!");
+
 		if (20 - (time - done_time) / 1000 < 0)
 		{
 			win = false;
 			last_time = 0.0f;
 			checkpointCounter = 1;
-			App->player->Respawn(0, vec3(10, 12, 0));
+			App->player->Respawn(0, vec3(10, 3, 0));
 			timerCount->Stop();
 			timerCount->Start();
 			lastlap = false;
 			done_time = 0.0f;
 			time_to_win = time_to_win - 1;
+			
+			
 		}
 		
 	}
-	
+	char score[40];
+	sprintf_s(score, "LAST LAP TIME :  %0.3f ", last_time);
+	App->renderer3D->displayText(-5, 12, -5,  0, 0, 0, score);
+	sprintf_s(score, "BEST LAP TIME :  %0.3f ", best_time);
+	App->renderer3D->displayText(-5, 15, -5, 0, 0, 0, score);
+	sprintf_s(score, "CURRENT  TIME:  %0.3f ", (time-done_time)/1000);
+	App->renderer3D->displayText(-5, 8, -5, 0, 0, 0, score);
 	App->window->SetTitle(title);
-
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -166,7 +193,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			if (last_time < best_time )
 				best_time = last_time;
 
-			if (time_to_win >= best_time)
+			if (time_to_win >= last_time)
 				win = true;
 
 			if (lastlap)
@@ -176,20 +203,21 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 				timerCount->Start();
 				lastlap = false;
 				done_time = 0.0f;
+				App->player->Respawn(0, vec3(10, 3, 0));
 			}
 
-
+			checkpointCounter = 1;
 			LOG("LAST TIME %f", last_time);
 			LOG("BEST TIME %f", best_time);
 		}
-		checkpointCounter = 1;
+		
 		bonus = 0.0f;
 
 	}
 
 	if (body1 == sensor3){
-
-		checkpointCounter = 2;
+		if (checkpointCounter == 1)
+				checkpointCounter = 2;
 
 	}
 

@@ -33,7 +33,7 @@ public:
 	bool lastlap;
 	float time_to_win;
 	bool  win;
-
+	
 	Cube s;
 	PhysBody3D* sensor;
 	Cube r;
@@ -44,4 +44,7 @@ public:
 	PhysBody3D* sensor4;
 	Cube w;
 	PhysBody3D* sensor5;
+
+	Cube scoreCube;
+	PhysBody3D* scores;
 };
