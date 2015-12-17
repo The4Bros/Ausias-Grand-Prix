@@ -19,7 +19,8 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	VehicleInfo car;
-
+	App->audio->LoadFx("game/a.wav");
+	counter = 0;
 	// Car properties ----------------------------------------
 	car.chassis_size.Set(4,1, 8);
 	car.chassis_offset.Set(0, 0.9, 0);
@@ -140,12 +141,13 @@ update_status ModulePlayer::Update(float dt)
 		default: break;
 		}
 	}
-
+	
 	turn = acceleration = brake = 0.0f;
 
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		acceleration = MAX_ACCELERATION;
+		if (!App->audio->PlayFx(1, 0)){ App->audio->PlayFx(1, 0); }
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
@@ -176,6 +178,11 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Brake(brake);
 
 	vehicle->Render();
+
+
+
+		
+		
 
 	
 

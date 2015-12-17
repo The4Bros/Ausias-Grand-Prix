@@ -21,7 +21,7 @@ bool ModuleSceneIntro::Start()
 	best_time = 500.0f;
 	bonus = 0.0f;
 	win = false;
-	time_to_win = 28.0f;
+	time_to_win = 30.0f;
 	LOG("Loading Intro assets");
 	bool ret = true;
 	timerCount->Start();
@@ -136,13 +136,13 @@ update_status ModuleSceneIntro::Update(float dt)
 		{
 			win = false;
 			last_time = 0.0f;
-			best_time = 0.0f;
 			checkpointCounter = 1;
 			App->player->Respawn(0, vec3(10, 12, 0));
 			timerCount->Stop();
 			timerCount->Start();
 			lastlap = false;
 			done_time = 0.0f;
+			time_to_win = time_to_win - 1;
 		}
 		
 	}
