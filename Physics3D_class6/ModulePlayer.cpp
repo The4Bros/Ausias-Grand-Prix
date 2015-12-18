@@ -19,7 +19,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	VehicleInfo car;
-	App->audio->LoadFx("game/a.wav");
+	App->audio->LoadFx("a.wav");
 	counter = 0;
 	// Car properties ----------------------------------------
 	car.chassis_size.Set(4,1, 8);
@@ -131,13 +131,13 @@ update_status ModulePlayer::Update(float dt)
 
 	
 
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN){
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN){
 		
 		switch (App->scene_intro->checkpointCounter){
 
-		case 1:  Respawn(0, vec3(10, 12, 0));  break;
-		case 2: Respawn(180, vec3(-175, 12, 155));break;
-		case 3: Respawn(90, vec3(-55, 12, -75)); break;
+		case 1:  Respawn(0, vec3(10, 4, 0));  break;
+		case 2: Respawn(180, vec3(-175, 4, 155));break;
+		case 3: Respawn(90, vec3(-55, 4, -75)); break;
 		default: break;
 		}
 	}
@@ -147,8 +147,12 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		acceleration = MAX_ACCELERATION;
-		if (!App->audio->PlayFx(1, 0)){ App->audio->PlayFx(1, 0); }
+		App->audio->PlayFx(1, 0);
+		
+
 	}
+	
+	 
 
 	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 	{
@@ -162,12 +166,13 @@ update_status ModulePlayer::Update(float dt)
 			turn -= TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
+		
 		
 		acceleration = -MAX_ACCELERATION;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 		brake = BRAKE_POWER;
 	}
@@ -188,6 +193,7 @@ update_status ModulePlayer::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
+
 
 
 void ModulePlayer::Respawn(float degrees,vec3 pos)

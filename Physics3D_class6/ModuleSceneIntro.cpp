@@ -33,7 +33,7 @@ bool ModuleSceneIntro::Start()
 	//Music
 
 	
-	App->audio->PlayMusic("Game/han_solo.wav", 2.0f);
+	App->audio->PlayMusic("han_solo.wav", 2.0f);
 
 	//Circuit Walls ---------------------------------------------------------
 	App->physics->AddStraightRoad(100, vec3(0.0f, 0.0f, 0.0f), 1);
@@ -104,8 +104,8 @@ bool ModuleSceneIntro::Start()
 	sensor5->collision_listeners.add(this);
 	
 
-	scoreCube.size = vec3(20, 20, 1);
-	scoreCube.SetPos(-15, 10.0f, 0);
+	scoreCube.size = vec3(30, 20, 1);
+	scoreCube.SetPos(-20, 10.0f, 90);
 	scoreCube.SetRotation(150, vec3(0, 1, 0));
 	scores = App->physics->AddBody(scoreCube, 0.0f);
 	scores->SetAsSensor(false);
@@ -169,11 +169,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	char score[40];
 	sprintf_s(score, "LAST LAP TIME :  %0.3f ", last_time);
-	App->renderer3D->displayText(-5, 12, -5,  0, 0, 0, score);
+	App->renderer3D->displayText(-5, 12, 80,  0, 0, 0, score);
 	sprintf_s(score, "BEST LAP TIME :  %0.3f ", best_time);
-	App->renderer3D->displayText(-5, 15, -5, 0, 0, 0, score);
+	App->renderer3D->displayText(-5, 15, 80, 0, 0, 0, score);
 	sprintf_s(score, "CURRENT  TIME:  %0.3f ", (time-done_time)/1000);
-	App->renderer3D->displayText(-5, 8, -5, 0, 0, 0, score);
+	App->renderer3D->displayText(-5, 8, 80, 0, 0, 0, score);
 	App->window->SetTitle(title);
 	
 	return UPDATE_CONTINUE;
