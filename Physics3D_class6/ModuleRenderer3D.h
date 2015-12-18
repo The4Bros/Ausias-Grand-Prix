@@ -18,6 +18,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	void displayText(float x, float y,float z, int r, int g, int b, const char *string);
+	void displayTextB(float x, float y, float z, int r, int g, int b, const char *string);
 	void OnResize(int width, int height);
 
 public:

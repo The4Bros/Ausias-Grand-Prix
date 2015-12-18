@@ -147,11 +147,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	else { sprintf_s(title, "Last Time Lap %0.3f    -    Best Lap time : %0.3f    - Last Lap ", last_time, best_time); lastlap = true; }
 	if (win)
 	{
-		sprintf_s(title, "You win with this time %0.3f - The difference with this time and the objective time is %0.3f -Time to restart : %0.2f", best_time, time_to_win - best_time, 20 - (time - done_time) / 1000);
-		App->renderer3D->displayText(-5, 8, -5, 0, 0, 0, "YOU WIN BABY!!!");
-		App->renderer3D->displayText(0, 8, 500, 1, 1, 1, "YOU WIN BABY!!!");
+		sprintf_s(title, "You win with this time %0.3f - The difference with this time and the objective time is %0.3f -Time to restart : %0.2f", best_time, time_to_win - best_time, 10 - (time - done_time) / 1000);
+		App->renderer3D->displayText(-5, 6, -5, 0, 0, 0, "YOU WIN BABY!!!");
+		App->renderer3D->displayTextB(0, 8, 200, 255, 255, 255, "YOU WIN BABY!!!");
 
-		if (20 - (time - done_time) / 1000 < 0)
+		if (10 - (time - done_time) / 1000 < 0)
 		{
 			win = false;
 			last_time = 0.0f;

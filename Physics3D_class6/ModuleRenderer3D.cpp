@@ -162,3 +162,13 @@ void ModuleRenderer3D::displayText(float x, float y, float z , int r, int g, int
 		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
 	}
 }
+void ModuleRenderer3D::displayTextB(float x, float y, float z, int r, int g, int b, const char *string) {
+	int j = strlen(string);
+
+	glColor3f(r, g, b);
+	glRasterPos3f(x, y, z);
+	for (int i = 0; i < j; i++) {
+
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
+	}
+}
